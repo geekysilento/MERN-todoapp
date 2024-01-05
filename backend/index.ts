@@ -20,4 +20,4 @@ app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
 
-mongoose.connect(`mongodb+srv://adityakarna:${password}@cluster0.oqkzqfh.mongodb.net/`)
+mongoose.connect(`mongodb+srv://adityakarna:${password}@cluster0.oqkzqfh.mongodb.net/`, {dbName: "todoDB"})
