@@ -2,6 +2,7 @@ import { Button, Card, Typography } from "@mui/material"
 import TextField from "@mui/material/TextField"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Signin() {
     const [username, setUsername] = useState('')
@@ -10,13 +11,12 @@ function Signin() {
     const navigate = useNavigate();
 
     const handleSignin = async () => {
-        const response = await fetch('http://localhost:3000/auth/signin', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
+        const response = await axios.post("http://localhost:3000/auth/signin" ,{
+            username: username,
+            password: password
         });
-
-        const data = await response.json();
+        
+        const data = await response.data;
         if (data.token) {
             localStorage.setItem("token", data.token)
             navigate("/todos")
