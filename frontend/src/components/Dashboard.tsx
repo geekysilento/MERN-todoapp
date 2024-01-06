@@ -58,7 +58,16 @@ function Dashboard() {
         localStorage.removeItem("token");
         navigate('/');
     };
+    const handleDeleteTodo = async (todoId: string) => {
+        // Implement the logic to delete the todo
+        // Update the state accordingly
+      };
 
+      const handleUpdateTodo = async (todoId: string, updatedTodo: { title: string, description: string }) => {
+        // Implement the logic to update the todo
+        // Update the state accordingly
+      };
+      
     return (
         <>
             <div className="header-bar">
@@ -89,7 +98,12 @@ function Dashboard() {
             {/* Display Todos using MUI Card */}
             <Grid container spacing={2} >
                 {todos.map((todo) => (
-                    <TodoCard key={todo._id} todo={todo} />
+                    <TodoCard
+                    key={todo._id}
+                    todo={todo}
+                    onDelete={handleDeleteTodo}
+                    onUpdate={handleUpdateTodo}
+                />
                 ))}
             </Grid>
         </>

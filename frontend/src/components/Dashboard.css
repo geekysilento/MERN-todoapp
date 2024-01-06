@@ -5,8 +5,22 @@ body {
     min-height: 100vh;
     padding: 20px;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow-y: scroll; /* Set overflow-y to scroll for vertical scrolling */
     color: #d7d9dd; /* Set text color to white */
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: transparent transparent; /* For Firefox */
+}
+
+body::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: transparent; /* Color of the thumb */
+}
+
+body::-webkit-scrollbar-track {
+    background-color: transparent; /* Color of the track */
 }
 
 .header-bar {
