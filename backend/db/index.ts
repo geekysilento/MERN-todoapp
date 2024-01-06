@@ -9,7 +9,7 @@ const todoSchema = new mongoose.Schema({
   title: String,
   description: String,
   done: Boolean,
-  userID: String,
+  userId: String,
 });
 
 export const User = mongoose.model("User", userSchema);

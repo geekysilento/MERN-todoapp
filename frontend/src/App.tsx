@@ -37,7 +37,6 @@ function InitState() {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await response.json();
-      console.log(data)
       if (data.username) {
         setAuth({ token: data.token, username: data.username });
         navigate("/todos");
