@@ -11,7 +11,6 @@ const todoSchema = object({
 
 router.post("/todos", authenticateJwt, async (req, res) => {
   try {
-    console.log("control reaches here")
     const { title, description } = todoSchema.parse(req.body);
     const done = false;
     const userId = req.headers["userId"];
@@ -50,15 +49,14 @@ router.delete("/todos/:todoId", authenticateJwt, async (req, res) => {
   }
 });
 
-router.patch("/todos/:todoId/update", authenticateJwt, async (req, res) => {
+router.patch("/todos/:todoId", authenticateJwt, async (req, res) => {
   try {
     const { todoId } = req.params;
     const userId = req.headers["userId"];
-    const todo= req.body
 
     const updatedTodo = await Todo.findOneAndUpdate(
       { _id: todoId, userId },
-      {todo},
+      req.body,
       { new: true }
     );
 

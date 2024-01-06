@@ -40,6 +40,8 @@ function Dashboard() {
     };
 
     const handleCloseModal = () => {
+        setTitle('');
+        setDescription('');
         setOpenModal(false);
     };
 
@@ -50,7 +52,11 @@ function Dashboard() {
             body: JSON.stringify({ title, description })
         });
         const data = await response.json();
-        setTodos([...todos, data]);
+
+        const todoExists = todos.some((todo) => todo._id === data._id);
+        if (!todoExists) {
+            setTodos([...todos, data]);
+        }
         handleCloseModal();
     };
 
@@ -59,15 +65,34 @@ function Dashboard() {
         navigate('/');
     };
     const handleDeleteTodo = async (todoId: string) => {
-        // Implement the logic to delete the todo
-        // Update the state accordingly
-      };
+        try {
+            const response = await fetch(`http://localhost:3000/todo/todos/${todoId}`, {
+                method: "DELETE",
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem("token")}` }
+            });
 
-      const handleUpdateTodo = async (todoId: string, updatedTodo: { title: string, description: string }) => {
+            if (response.ok) {
+                // The todo was successfully deleted
+                // Update the state to reflect the change
+                setTodos((prevTodos) => prevTodos.filter((todo) => todo._id !== todoId));
+                console.log(`Todo with ID ${todoId} deleted successfully.`);
+            } else {
+                // There was an error deleting the todo
+                // Handle the error accordingly
+                console.error(`Failed to delete todo with ID ${todoId}. Status: ${response.status}`);
+            }
+        } catch (error) {
+            // Handle network errors or other exceptions
+            console.error(`An error occurred while deleting todo with ID ${todoId}`);
+        }
+    };
+
+
+    const handleUpdateTodo = async (todoId: string, updatedTodo: { title: string, description: string }) => {
         // Implement the logic to update the todo
         // Update the state accordingly
-      };
-      
+    };
+
     return (
         <>
             <div className="header-bar">
@@ -96,14 +121,14 @@ function Dashboard() {
             />
 
             {/* Display Todos using MUI Card */}
-            <Grid container spacing={2} >
+            <Grid container spacing={2}>
                 {todos.map((todo) => (
                     <TodoCard
-                    key={todo._id}
-                    todo={todo}
-                    onDelete={handleDeleteTodo}
-                    onUpdate={handleUpdateTodo}
-                />
+                        key={todo._id}  // Ensure that each TodoCard has a unique key
+                        todo={todo}
+                        onDelete={handleDeleteTodo}
+                        onUpdate={handleUpdateTodo}
+                    />
                 ))}
             </Grid>
         </>
