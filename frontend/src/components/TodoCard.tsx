@@ -5,7 +5,6 @@ interface TodoCardProps {
         _id: string;
         title: string;
         description: string;
-        done: boolean;
     };
     onDelete: (todoId: string) => void;
     onUpdate: (todoId: string, updatedTodo: { title: string, description: string }) => void;

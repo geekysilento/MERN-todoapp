@@ -12,7 +12,6 @@ interface Todo {
     _id: string;
     title: string;
     description: string;
-    done: boolean;
 }
 
 function Dashboard() {
@@ -24,16 +23,16 @@ function Dashboard() {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
 
+    const getTodos = async () => {
+        const response = await fetch('http://localhost:3000/todo/todos', {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        });
+        const data: Todo[] = await response.json();
+        setTodos(data);
+    };
     useEffect(() => {
-        const getTodos = async () => {
-            const response = await fetch('http://localhost:3000/todo/todos', {
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-            });
-            const data: Todo[] = await response.json();
-            setTodos(data);
-        };
         getTodos();
-    }, [authStateValue.token]);
+    }, [authStateValue.token]); //initial load
 
     const handleOpenModal = () => {
         setOpenModal(true);
@@ -72,26 +71,41 @@ function Dashboard() {
             });
 
             if (response.ok) {
-                // The todo was successfully deleted
-                // Update the state to reflect the change
-                setTodos((prevTodos) => prevTodos.filter((todo) => todo._id !== todoId));
-                console.log(`Todo with ID ${todoId} deleted successfully.`);
+                getTodos();
             } else {
-                // There was an error deleting the todo
-                // Handle the error accordingly
                 console.error(`Failed to delete todo with ID ${todoId}. Status: ${response.status}`);
             }
         } catch (error) {
-            // Handle network errors or other exceptions
             console.error(`An error occurred while deleting todo with ID ${todoId}`);
         }
     };
 
 
     const handleUpdateTodo = async (todoId: string, updatedTodo: { title: string, description: string }) => {
-        // Implement the logic to update the todo
-        // Update the state accordingly
+        try {
+            const response = await fetch(`http://localhost:3000/todo/todos/${todoId}`, {
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                },
+                body: JSON.stringify(updatedTodo)
+            });
+
+            if (response.ok) {
+                getTodos()
+
+                console.log("Todo updated successfully.");
+            } else {
+
+                console.error(`Failed to update todo: ${response.status} - ${response.statusText}`);
+            }
+        } catch (error) {
+
+            console.error("An error occurred while updating the todo:", error);
+        }
     };
+
 
     return (
         <>

@@ -12,13 +12,12 @@ const todoSchema = object({
 router.post("/todos", authenticateJwt, async (req, res) => {
   try {
     const { title, description } = todoSchema.parse(req.body);
-    const done = false;
     const userId = req.headers["userId"];
 
     const todoExists = await Todo.findOne({ title, description });
     if (todoExists) res.status(403).json({ message: "Todo already exists" });
     else {
-      const newTodo = new Todo({ title, description, done, userId });
+      const newTodo = new Todo({ title, description, userId });
 
       const savedTodo = await newTodo.save();
       res.status(201).json(savedTodo);
