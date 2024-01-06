@@ -1,7 +1,7 @@
 import express from "express";
 import { User } from "../db";
 const router = express.Router();
-import { SECRET } from "../middleware";
+import { SECRET, authenticateJwt } from "../middleware";
 import jwt from "jsonwebtoken";
 import { object, string } from "zod";
 
@@ -33,5 +33,14 @@ router.post("/signin", async (req, res) => {
     res.status(403).json({ message: "Invalid username or password" });
   }
 });
+
+router.get('/me', authenticateJwt,  async (req, res) => {
+    const user = await User.findOne({_id: req.headers['userId']})
+    if(user){
+        res.json({username: user.username});
+    }else{
+        res.status(403).json({message: "User Not Logged In"});
+    }
+})
 
 export default router;

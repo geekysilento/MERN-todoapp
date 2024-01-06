@@ -2,7 +2,7 @@ import { Button, Card, Typography } from "@mui/material"
 import TextField from "@mui/material/TextField"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
 function Signup() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -10,15 +10,17 @@ function Signup() {
     const navigate = useNavigate();
 
     const handleSignup = async () => {
-        const response = await axios.post('http://localhost:3000/auth/signup', {
-            username: username,
-            password: password
+        const response = await fetch('http://localhost:3000/auth/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
         });
 
-        const data = await response.data;
+        const data = await response.json();
         if (data.token) {
             localStorage.setItem("token", data.token)
             navigate("/todos")
+            window.location.reload();
         } else {
             alert("invalid credentials");
         }
@@ -29,7 +31,7 @@ function Signup() {
             Signup Below:
         </Typography>
         <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
-            <Card variant={"outlined"} style={{ width: 400, padding: 40 }}>
+            <Card variant={"outlined"} style={{ width: 400, padding: 40 , backgroundColor: "whitesmoke"}}>
                 <TextField id="username" label="username" variant="filled" fullWidth={true} onChange={(e) => setUsername(e.target.value)} />
                 <br /><br />
                 <TextField id="password" label="Password" variant="filled" type={"password"} fullWidth={true} onChange={(e) => setPassword(e.target.value)} />
