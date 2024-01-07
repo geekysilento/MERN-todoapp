@@ -14,7 +14,7 @@ router.post("/todos", authenticateJwt, async (req, res) => {
     const { title, description } = todoSchema.parse(req.body);
     const userId = req.headers["userId"];
 
-    const todoExists = await Todo.findOne({ title, description });
+    const todoExists = await Todo.findOne({ title, description, userId });
     if (todoExists) res.status(403).json({ message: "Todo already exists" });
     else {
       const newTodo = new Todo({ title, description, userId });
@@ -52,18 +52,22 @@ router.patch("/todos/:todoId", authenticateJwt, async (req, res) => {
   try {
     const { todoId } = req.params;
     const userId = req.headers["userId"];
+    const { title, description } = todoSchema.parse(req.body);
 
-    const updatedTodo = await Todo.findOneAndUpdate(
-      { _id: todoId, userId },
-      req.body,
-      { new: true }
-    );
+    const todoExists = await Todo.findOne({ title, description });
+    if (todoExists) res.status(403).json({ message: "Todo already exists" });
+    else {
+      const updatedTodo = await Todo.findOneAndUpdate(
+        { _id: todoId, userId },
+        req.body,
+        { new: true }
+      );
 
-    if (!updatedTodo) {
-      return res.status(404).json({ error: "Todo not found" });
+      if (!updatedTodo) {
+        return res.status(404).json({ error: "Todo not found" });
+      }
+      res.json(updatedTodo);
     }
-
-    res.json(updatedTodo);
   } catch (err) {
     res.status(500).json({ error: "Failed to update todo" });
   }

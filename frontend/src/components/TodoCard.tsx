@@ -21,9 +21,13 @@ export const TodoCard: React.FC<TodoCardProps> = ({ todo, onDelete, onUpdate }) 
     };
 
     const handleUpdate = () => {
-        const updatedTodo = { title: updatedTitle, description: updatedDescription };
-        onUpdate(todo._id, updatedTodo);
-        setOpenUpdateDialog(false);
+        if(updatedTitle.length && updatedDescription.length){
+            const updatedTodo = { title: updatedTitle, description: updatedDescription };
+            onUpdate(todo._id, updatedTodo);
+            setOpenUpdateDialog(false);
+        } else{
+            alert("todo fields cannot be empty!");
+        }
     };
 
     const handleOpenUpdateDialog = () => {

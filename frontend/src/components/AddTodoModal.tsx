@@ -14,12 +14,14 @@ interface AddTodoModalProps {
 
 export const AddTodoModal: React.FC<AddTodoModalProps> = ({ open, onClose, onAddTodo, title, setTitle, description, setDescription }) => {
   const handleAddTodo = () => {
-    // Pass the current title and description to the onAddTodo function
-    onAddTodo(title, description);
-    // Reset title and description after adding a new todo
-    setTitle('');
-    setDescription('');
-    onClose();
+    if (title.trim() !== '' && description.trim() !== ''){
+      onAddTodo(title, description);
+      setTitle('');
+      setDescription('');
+      onClose();
+    } else{
+      alert("todo fields cannot be empty!")
+    }
   };
 
   return (
