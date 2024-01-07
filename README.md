@@ -19,7 +19,7 @@ Before you begin, ensure you have met the following requirements:
 
    ```bash
    git clone https://github.com/geekysilento/MERN-todoapp.git
-   cd mern todo
+   cd MERN-todoapp
 2. **Open a new terminal for starting frontend server:**
    ```bash
    cd frontend
