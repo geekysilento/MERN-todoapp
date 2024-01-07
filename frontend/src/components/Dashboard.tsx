@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { authState } from '../store/authState';
 import { AddTodoModal } from './AddTodoModal';
 import { TodoCard } from './TodoCard';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Todo {
     _id: string;
@@ -58,7 +60,7 @@ function Dashboard() {
             }
             handleCloseModal();
         }else{
-            window.alert(data.message)
+            toast.error(data.message, { position: "top-right" });
         }
     };
 
@@ -101,7 +103,7 @@ function Dashboard() {
                 console.log("Todo updated successfully.");
             } else {
                 const errorData = await response.json();
-                window.alert(errorData.message);
+                toast.error(errorData.message, { position: "top-right" });
             }
         } catch (error) {
 
@@ -148,6 +150,7 @@ function Dashboard() {
                     />
                 ))}
             </Grid>
+            <ToastContainer />
         </>
     );
 }
