@@ -1,30 +1,35 @@
- • Simple Todo App built in MERN + Typescript.
- • Uses Recoil.js for state management.
- • ZOD for input validation.
- • MUI for styling.
+# Simple Todo App
 
-How to Run:- 
+A Todo application built using MongoDB, Express, React.js & Node.js (MERN) stack and TypeScript. 
+- It utilizes Recoil.js for state management.
+- ZOD for input validation
+- MUI for styling.
+
+## How to Run
 
 Before you begin, ensure you have met the following requirements:
 
- - Node.js installed 
- - npm installed
- - TypeScript (tsc) installed
+- Node.js installed
+- npm installed
+- TypeScript (tsc) installed
 
-Getting Started:
+## Getting Started
 
- • Clone the Repository.
- 
- Terminal 1(will run frontend on port:5173):
- • cd frontend
- • npm install
- • npm run dev
+1. **Clone the Repository:**
 
- Terminal 2(will run backend server on port:3000):
- • cd backend
- • npm install
- • tsc
- • cd dist
- • node index.js
- 
-  
+   ```bash
+   git clone https://github.com/geekysilento/MERN-todoapp.git
+   cd mern todo
+2. **Open a new terminal for starting frontend server:**
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+3. **Open another terminal for starting the backend server:**
+   ```
+   cd backend
+   npm install
+   tsc
+   cd dist
+   node index.js
