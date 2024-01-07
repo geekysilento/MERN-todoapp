@@ -51,12 +51,15 @@ function Dashboard() {
             body: JSON.stringify({ title, description })
         });
         const data = await response.json();
-
-        const todoExists = todos.some((todo) => todo._id === data._id);
-        if (!todoExists) {
-            setTodos([...todos, data]);
+        if(response.ok){
+            const todoExists = todos.some((todo) => todo._id === data._id);
+            if (!todoExists) {
+                setTodos([...todos, data]);
+            }
+            handleCloseModal();
+        }else{
+            window.alert(data.message)
         }
-        handleCloseModal();
     };
 
     const logoutHandler = () => {
@@ -97,8 +100,8 @@ function Dashboard() {
 
                 console.log("Todo updated successfully.");
             } else {
-
-                console.error(`Failed to update todo: ${response.status} - ${response.statusText}`);
+                const errorData = await response.json();
+                window.alert(errorData.message);
             }
         } catch (error) {
 
