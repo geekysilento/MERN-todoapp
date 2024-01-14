@@ -13,11 +13,11 @@ app.use("/auth", authRoutes);
 app.use("/todo", todoRoutes);
 
 app.get('/', (req, res) => {
-    res.send('Hello, Express!');
+    res.send('Hello, Express!. My server runs well!');
 });
 
 app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+    console.log(`Server is running on ${port}`);
 });
 
 mongoose.connect(`mongodb+srv://adityakarna:${password}@cluster0.oqkzqfh.mongodb.net/`, {dbName: "todoDB"})
