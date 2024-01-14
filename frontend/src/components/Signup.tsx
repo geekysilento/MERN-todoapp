@@ -10,7 +10,7 @@ function Signup() {
     const navigate = useNavigate();
 
     const handleSignup = async () => {
-        const response = await fetch('http://localhost:3000/auth/signup', {
+        const response = await fetch(`http://${import.meta.env.VITE_SERVER_ID}:3000/auth/signup`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
@@ -31,7 +31,7 @@ function Signup() {
             Signup Below:
         </Typography>
         <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
-            <Card variant={"outlined"} style={{ width: 400, padding: 40 , backgroundColor: "whitesmoke"}}>
+            <Card variant={"outlined"} style={{ width: 400, padding: 40, backgroundColor: "whitesmoke" }}>
                 <TextField id="username" label="username" variant="filled" fullWidth={true} onChange={(e) => setUsername(e.target.value)} />
                 <br /><br />
                 <TextField id="password" label="Password" variant="filled" type={"password"} fullWidth={true} onChange={(e) => setPassword(e.target.value)} />
