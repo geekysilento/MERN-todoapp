@@ -13,7 +13,7 @@ app.use("/auth", authRoutes);
 app.use("/todo", todoRoutes);
 
 app.get('/', (req, res) => {
-    res.send('Hello, World!. My server runs well!');
+    res.send('Hello, World!. My AWS server runs well!');
 });
 
 app.listen(port, () => {
