@@ -20,7 +20,6 @@ function Signup() {
         if (data.token) {
             localStorage.setItem("token", data.token)
             navigate("/todos")
-            window.location.reload();
         } else {
             alert("invalid credentials");
         }

@@ -19,7 +19,6 @@ function Signin() {
         if (data.token) {
             localStorage.setItem("token", data.token)
             navigate("/todos")
-            window.location.reload();
         } else {
             alert("invalid credentials");
         }
@@ -27,6 +26,7 @@ function Signin() {
 
 
     return <>
+
         <Typography style={{ display: "flex", justifyContent: "center", marginTop: 100 }} variant={"h6"}>
             Login Below:
         </Typography>
