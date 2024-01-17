@@ -26,3 +26,4 @@ dist-ssr
 *.pem
 bin
 common
+.secrets
