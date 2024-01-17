@@ -63,3 +63,10 @@ body::-webkit-scrollbar-track {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
+.loading-indicator-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh; /* Adjust as needed */
+}

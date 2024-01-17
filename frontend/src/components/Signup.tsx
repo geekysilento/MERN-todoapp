@@ -2,15 +2,18 @@ import { Button, Card, Typography } from "@mui/material"
 import TextField from "@mui/material/TextField"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from 'recoil';
+import { authState } from '../store/authState';
 
 function Signup() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
     const navigate = useNavigate();
+    const setAuth = useSetRecoilState(authState);
 
     const handleSignup = async () => {
-        const response = await fetch(`https://${import.meta.env.VITE_SERVER_ID}/auth/signup`, {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_ID}/auth/signup`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
@@ -19,6 +22,8 @@ function Signup() {
         const data = await response.json();
         if (data.token) {
             localStorage.setItem("token", data.token)
+            setAuth({ token: data.token, username: username });
+            console.log({setAuth})
             navigate("/todos")
         } else {
             alert("invalid credentials");

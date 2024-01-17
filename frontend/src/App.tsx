@@ -33,7 +33,7 @@ function InitState() {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch(`https://${import.meta.env.VITE_SERVER_ID}/auth/me`, {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_ID}/auth/me`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await response.json();

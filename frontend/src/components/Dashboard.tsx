@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Button, Typography, Grid } from "@mui/material";
-import { useRecoilValue } from 'recoil';
-import { userName } from "../store/userName";
+import { Button, Typography, Grid, CircularProgress } from "@mui/material";
+import { useRecoilState } from 'recoil';
 import './Dashboard.css';
 import { useNavigate } from "react-router-dom";
 import { authState } from '../store/authState';
@@ -17,24 +16,33 @@ interface Todo {
 }
 
 function Dashboard() {
-    const username = useRecoilValue(userName);
-    const authStateValue = useRecoilValue(authState);
+    const [authStateValue, setAuthState] = useRecoilState(authState);
     const navigate = useNavigate();
     const [openModal, setOpenModal] = useState(false);
     const [todos, setTodos] = useState<Todo[]>([]);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const [loading, setLoading] = useState(true);
 
     const getTodos = async () => {
-        const response = await fetch(`https://${import.meta.env.VITE_SERVER_ID}/todo/todos`, {
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-        });
-        const data: Todo[] = await response.json();
-        setTodos(data);
+        setLoading(true);
+
+        try {
+            const response = await fetch(`${import.meta.env.VITE_SERVER_ID}/todo/todos`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            });
+            const data: Todo[] = await response.json();
+            setTodos(data);
+        } catch (error) {
+            console.error('Error fetching todos:', error);
+        } finally {
+            setLoading(false);
+        }
     };
+
     useEffect(() => {
         getTodos();
-    }, [authStateValue.token]); //initial load
+    }, [authStateValue.token]);
 
     const handleOpenModal = () => {
         setOpenModal(true);
@@ -47,7 +55,7 @@ function Dashboard() {
     };
 
     const handleAddTodo = async () => {
-        const response = await fetch(`https://${import.meta.env.VITE_SERVER_ID}/todo/todos`, {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_ID} / todo / todos`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem("token")}` },
             body: JSON.stringify({ title, description })
@@ -66,11 +74,12 @@ function Dashboard() {
 
     const logoutHandler = () => {
         localStorage.removeItem("token");
+        setAuthState((prevAuthState) => ({ ...prevAuthState, username: null }));
         navigate('/');
     };
     const handleDeleteTodo = async (todoId: string) => {
         try {
-            const response = await fetch(`https://${import.meta.env.VITE_SERVER_ID}/todo/todos/${todoId}`, {
+            const response = await fetch(`${import.meta.env.VITE_SERVER_ID} / todo / todos / ${todoId}`, {
                 method: "DELETE",
                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem("token")}` }
             });
@@ -78,21 +87,21 @@ function Dashboard() {
             if (response.ok) {
                 getTodos();
             } else {
-                console.error(`Failed to delete todo with ID ${todoId}. Status: ${response.status}`);
+                console.error(`Failed to delete todo with ID ${todoId}.Status: ${response.status} `);
             }
         } catch (error) {
-            console.error(`An error occurred while deleting todo with ID ${todoId}`);
+            console.error(`An error occurred while deleting todo with ID ${todoId} `);
         }
     };
 
 
     const handleUpdateTodo = async (todoId: string, updatedTodo: { title: string, description: string }) => {
         try {
-            const response = await fetch(`https://${import.meta.env.VITE_SERVER_ID}/todo/todos/${todoId}`, {
+            const response = await fetch(`${import.meta.env.VITE_SERVER_ID} /todo/todos / ${todoId} `, {
                 method: "PATCH",
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                    Authorization: `Bearer ${localStorage.getItem("token")} `
                 },
                 body: JSON.stringify(updatedTodo)
             });
@@ -109,14 +118,13 @@ function Dashboard() {
 
             console.error("An error occurred while updating the todo:", error);
         }
-    };
-
+    }
 
     return (
         <>
             <div className="header-bar">
                 <Typography variant="h5" component="div" className="header-text">
-                    {username}'s Toodooz
+                    {authStateValue.username}'s Toodooz
                 </Typography>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <Button variant="outlined" color="error" onClick={logoutHandler}>Logout</Button>
@@ -127,6 +135,26 @@ function Dashboard() {
                     Add Todo
                 </Button>
             </div>
+
+            {loading ? (
+                <div className="loading-indicator-container">
+                    <CircularProgress />
+                </div>
+            ) : (
+                <>
+                    {/* Display Todos using MUI Card */}
+                    <Grid container spacing={2}>
+                        {todos.map((todo) => (
+                            <TodoCard
+                                key={todo._id}
+                                todo={todo}
+                                onDelete={handleDeleteTodo}
+                                onUpdate={handleUpdateTodo}
+                            />
+                        ))}
+                    </Grid>
+                </>
+            )}
 
             {/* Customized Material-UI Modal */}
             <AddTodoModal
@@ -139,17 +167,6 @@ function Dashboard() {
                 setDescription={setDescription}
             />
 
-            {/* Display Todos using MUI Card */}
-            <Grid container spacing={2}>
-                {todos.map((todo) => (
-                    <TodoCard
-                        key={todo._id}  // Ensure that each TodoCard has a unique key
-                        todo={todo}
-                        onDelete={handleDeleteTodo}
-                        onUpdate={handleUpdateTodo}
-                    />
-                ))}
-            </Grid>
             <ToastContainer />
         </>
     );
