@@ -10,7 +10,7 @@ function Signup() {
     const navigate = useNavigate();
 
     const handleSignup = async () => {
-        const response = await fetch(`http://${import.meta.env.VITE_SERVER_ID}:3000/auth/signup`, {
+        const response = await fetch(`https://${import.meta.env.VITE_SERVER_ID}/auth/signup`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })

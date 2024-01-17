@@ -10,7 +10,7 @@ function Signin() {
     const navigate = useNavigate();
 
     const handleSignin = async () => {
-        const response = await fetch(`http://${import.meta.env.VITE_SERVER_ID}:3000/auth/signin`, {
+        const response = await fetch(`https://${import.meta.env.VITE_SERVER_ID}/auth/signin`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })

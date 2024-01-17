@@ -26,7 +26,7 @@ function Dashboard() {
     const [description, setDescription] = useState('');
 
     const getTodos = async () => {
-        const response = await fetch(`http://${import.meta.env.VITE_SERVER_ID}:3000/todo/todos`, {
+        const response = await fetch(`https://${import.meta.env.VITE_SERVER_ID}/todo/todos`, {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
         });
         const data: Todo[] = await response.json();
@@ -47,7 +47,7 @@ function Dashboard() {
     };
 
     const handleAddTodo = async () => {
-        const response = await fetch(`http://${import.meta.env.VITE_SERVER_ID}:3000/todo/todos`, {
+        const response = await fetch(`https://${import.meta.env.VITE_SERVER_ID}/todo/todos`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem("token")}` },
             body: JSON.stringify({ title, description })
@@ -70,7 +70,7 @@ function Dashboard() {
     };
     const handleDeleteTodo = async (todoId: string) => {
         try {
-            const response = await fetch(`http://${import.meta.env.VITE_SERVER_ID}:3000/todo/todos/${todoId}`, {
+            const response = await fetch(`https://${import.meta.env.VITE_SERVER_ID}/todo/todos/${todoId}`, {
                 method: "DELETE",
                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem("token")}` }
             });
@@ -88,7 +88,7 @@ function Dashboard() {
 
     const handleUpdateTodo = async (todoId: string, updatedTodo: { title: string, description: string }) => {
         try {
-            const response = await fetch(`http://${import.meta.env.VITE_SERVER_ID}:3000/todo/todos/${todoId}`, {
+            const response = await fetch(`https://${import.meta.env.VITE_SERVER_ID}/todo/todos/${todoId}`, {
                 method: "PATCH",
                 headers: {
                     'Content-Type': 'application/json',
